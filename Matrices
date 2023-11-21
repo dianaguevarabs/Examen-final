@@ -1,0 +1,67 @@
+// Matrices Diana Guevara 181864
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define tamano 30
+
+void llenamatriz (int matriz[tamano][tamano]) 
+{
+    for (int i = 0; i < tamano; ++i) 
+	{
+        for (int j = 0; j < tamano; ++j) 
+		{
+            matriz [i][j] = rand() % 10;
+        }
+    }
+}
+void imprimematriz (int matriz[tamano][tamano]) 
+{
+    for (int i = 0; i < tamano; ++i) 
+	{
+        for (int j = 0; j < tamano; ++j) 
+		{
+            printf ("%d ", matriz[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+void multiplicamatrices (int matriz1 [tamano][tamano], int matriz2 [tamano][tamano], int resultado[tamano][tamano]) 
+{
+    for (int i = 0; i < tamano; ++i) 
+	{
+        for (int j = 0; j < tamano; ++j) 
+		{
+            resultado [i][j] = 0;
+            for (int k = 0; k < tamano; ++k) 
+			{
+                resultado [i][j] += matriz1 [i][k] * matriz2 [k][j];
+            }
+        }
+    }
+}
+int main() 
+{
+    srand (time(NULL));
+    int matriz1 [tamano][tamano];
+    int matriz2 [tamano][tamano];
+    int resultado [tamano][tamano];
+    llenamatriz (matriz1);
+    llenamatriz (matriz2);
+    printf ("Matriz 1:\n");
+    imprimematriz (matriz1);
+    printf ("Matriz 2:\n");
+    imprimematriz(matriz2);
+
+    clock_t inicio = clock();
+    multiplicamatrices(matriz1, matriz2, resultado);
+    clock_t fin = clock();
+    double tiempoejecucion = ((double)(fin - inicio) * 1000) / CLOCKS_PER_SEC;
+
+    printf("Resultado:\n");
+    imprimematriz(resultado);
+    printf("Tiempo de ejecucion: %f milisegundos\n", tiempoejecucion);
+
+    return 0;
+}
