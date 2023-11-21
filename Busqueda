@@ -1,0 +1,92 @@
+// Busqueda Diana Guevara 181864
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define tamano 50000
+
+int busquedasecuencial(int arreglo [], int n, int x) 
+{
+    for (int i = 0; i < n; i++) 
+	{
+        if (arreglo [i] == x) 
+		{
+            return i;
+        }
+    }
+    return -1;
+}
+int busquedabinaria (int arreglo [], int low, int high, int x) 
+{
+    while (low <= high) 
+	{
+        int mid = low + (high - low) / 2;
+        if (arreglo [mid] == x) 
+		{
+            return mid;
+        }
+        if (arreglo [mid] < x) 
+		{
+            low = mid + 1;
+        } else 
+		{
+            high = mid - 1;
+        }
+    }
+    return -1;
+}
+
+void generaarregloordenado (int arreglo [], int n) 
+{
+    srand(time(NULL));
+    for (int i = 0; i < n; i++) 
+	{
+        arreglo [i] = rand() % 50001; 
+    }
+}
+int main() 
+{
+    int arreglo [tamano];
+    clock_t inicio, fin;
+    double tiempo;
+
+    generaarregloordenado(arreglo, tamano);
+    double tiempossecuencial[100], tiemposbinaria[100];
+    for (int i = 0; i < 100; i++) {
+        int buscanumero = rand() % 50001; 
+        inicio = clock();
+        busquedasecuencial(arreglo, tamano, buscanumero);
+        fin = clock();
+        tiempo = ((double)(fin - inicio)) * 1000.0 / CLOCKS_PER_SEC;
+        tiempossecuencial[i] = tiempo;
+
+        inicio = clock();
+        busquedabinaria(arreglo, 0, tamano - 1, buscanumero);
+        fin = clock();
+        tiempo = ((double)(fin - inicio)) * 1000.0 / CLOCKS_PER_SEC;
+        tiemposbinaria[i] = tiempo;
+    }
+    double sumasecuencial = 0, sumabinaria = 0;
+    double minimosecuencial = tiempossecuencial[0], minimobinaria = tiemposbinaria[0];
+    double maximosecuencial = tiempossecuencial[0], maximobinaria = tiemposbinaria[0];
+  for (int i = 0; i < 100; i++) 
+	{
+        sumasecuencial += tiempossecuencial[i];
+        sumabinaria += tiemposbinaria[i];
+        if (tiempossecuencial[i] < minimosecuencial) minimosecuencial = tiempossecuencial[i];
+        if (tiempossecuencial[i] > maximosecuencial) maximosecuencial = tiempossecuencial[i];
+        if (tiemposbinaria[i] < minimobinaria) minimobinaria = tiemposbinaria[i];
+        if (tiemposbinaria[i] > maximobinaria) maximobinaria = tiemposbinaria[i];
+    }
+    printf ("Busqueda Secuencial:\n");
+    printf ("Tiempo promedio: %f milisegundos\n", sumasecuencial / 100);
+    printf ("Tiempo minimo: %f milisegundos\n", minimosecuencial);
+    printf ("Tiempo maximo: %f milisegundos\n", maximosecuencial);
+	printf ("\n");
+    printf ("Busqueda Binaria:\n");
+    printf ("Tiempo promedio: %f milisegundos\n", sumabinaria / 100);
+    printf ("Tiempo minimo: %f milisegundos\n", minimobinaria);
+    printf ("Tiempo maximo: %f milisegundos\n", maximobinaria);
+
+    return 0;
+}
